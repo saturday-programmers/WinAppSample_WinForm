@@ -37,6 +37,8 @@
 			this.rbtnMultiplication = new System.Windows.Forms.RadioButton();
 			this.rbtnDivision = new System.Windows.Forms.RadioButton();
 			this.groupBox = new System.Windows.Forms.GroupBox();
+			this.cmbOtherCalcPattern = new System.Windows.Forms.ComboBox();
+			this.rbtnOther = new System.Windows.Forms.RadioButton();
 			this.btnCalc = new System.Windows.Forms.Button();
 			this.lblEqual = new System.Windows.Forms.Label();
 			this.lblResult = new System.Windows.Forms.Label();
@@ -90,7 +92,7 @@
 			// rbtnSubtraction
 			// 
 			this.rbtnSubtraction.AutoSize = true;
-			this.rbtnSubtraction.Location = new System.Drawing.Point(163, 35);
+			this.rbtnSubtraction.Location = new System.Drawing.Point(131, 35);
 			this.rbtnSubtraction.Name = "rbtnSubtraction";
 			this.rbtnSubtraction.Size = new System.Drawing.Size(47, 16);
 			this.rbtnSubtraction.TabIndex = 4;
@@ -102,7 +104,7 @@
 			// rbtnMultiplication
 			// 
 			this.rbtnMultiplication.AutoSize = true;
-			this.rbtnMultiplication.Location = new System.Drawing.Point(283, 35);
+			this.rbtnMultiplication.Location = new System.Drawing.Point(219, 35);
 			this.rbtnMultiplication.Name = "rbtnMultiplication";
 			this.rbtnMultiplication.Size = new System.Drawing.Size(47, 16);
 			this.rbtnMultiplication.TabIndex = 5;
@@ -114,7 +116,7 @@
 			// rbtnDivision
 			// 
 			this.rbtnDivision.AutoSize = true;
-			this.rbtnDivision.Location = new System.Drawing.Point(403, 35);
+			this.rbtnDivision.Location = new System.Drawing.Point(307, 35);
 			this.rbtnDivision.Name = "rbtnDivision";
 			this.rbtnDivision.Size = new System.Drawing.Size(47, 16);
 			this.rbtnDivision.TabIndex = 6;
@@ -125,16 +127,39 @@
 			// 
 			// groupBox
 			// 
+			this.groupBox.Controls.Add(this.cmbOtherCalcPattern);
+			this.groupBox.Controls.Add(this.rbtnOther);
 			this.groupBox.Controls.Add(this.rbtnAddition);
 			this.groupBox.Controls.Add(this.rbtnDivision);
 			this.groupBox.Controls.Add(this.rbtnSubtraction);
 			this.groupBox.Controls.Add(this.rbtnMultiplication);
-			this.groupBox.Location = new System.Drawing.Point(94, 54);
+			this.groupBox.Location = new System.Drawing.Point(44, 54);
 			this.groupBox.Name = "groupBox";
-			this.groupBox.Size = new System.Drawing.Size(508, 84);
+			this.groupBox.Size = new System.Drawing.Size(606, 84);
 			this.groupBox.TabIndex = 7;
 			this.groupBox.TabStop = false;
 			this.groupBox.Text = "計算方法";
+			// 
+			// cmbOtherCalcPattern
+			// 
+			this.cmbOtherCalcPattern.FormattingEnabled = true;
+			this.cmbOtherCalcPattern.Location = new System.Drawing.Point(457, 34);
+			this.cmbOtherCalcPattern.Name = "cmbOtherCalcPattern";
+			this.cmbOtherCalcPattern.Size = new System.Drawing.Size(112, 20);
+			this.cmbOtherCalcPattern.TabIndex = 8;
+			this.cmbOtherCalcPattern.SelectedIndexChanged += new System.EventHandler(this.cmbOtherCalcPattern_SelectedIndexChanged);
+			// 
+			// rbtnOther
+			// 
+			this.rbtnOther.AutoSize = true;
+			this.rbtnOther.Location = new System.Drawing.Point(395, 35);
+			this.rbtnOther.Name = "rbtnOther";
+			this.rbtnOther.Size = new System.Drawing.Size(54, 16);
+			this.rbtnOther.TabIndex = 7;
+			this.rbtnOther.TabStop = true;
+			this.rbtnOther.Text = "その他";
+			this.rbtnOther.UseVisualStyleBackColor = true;
+			this.rbtnOther.CheckedChanged += new System.EventHandler(this.rbtnCalcPattern_CheckedChanged);
 			// 
 			// btnCalc
 			// 
@@ -233,6 +258,8 @@
 		private System.Windows.Forms.Button btnClear;
 		private System.Windows.Forms.ErrorProvider errorProvider;
 		private System.Windows.Forms.Label lblCalcSign1;
+		private System.Windows.Forms.ComboBox cmbOtherCalcPattern;
+		private System.Windows.Forms.RadioButton rbtnOther;
 	}
 }
 

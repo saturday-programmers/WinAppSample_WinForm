@@ -22,7 +22,9 @@ namespace WinAppSample_WinForm.Business
 			/// <summary>乗算</summary>
 			Multiplication,
 			/// <summary>除残</summary>
-			Division
+			Division,
+			/// <summary>べき乗</summary>
+			Power
 		}
 		#endregion
 
@@ -47,6 +49,9 @@ namespace WinAppSample_WinForm.Business
 				case CalculateType.Addition:
 					calculator = new AdditionCalculator<float>(values[0], values[1]);
 					break;
+				case CalculateType.Power:
+					calculator = new PowerCalculator<float>(values[0], values[1]);
+					break;
 			}
 
 			var isValid = calculator?.Validate() ?? false;
@@ -64,6 +69,7 @@ namespace WinAppSample_WinForm.Business
 			switch (calculateType)
 			{
 				case CalculateType.Addition:
+				case CalculateType.Power:
 					ret = (values.Length == 2);
 					break;
 			}

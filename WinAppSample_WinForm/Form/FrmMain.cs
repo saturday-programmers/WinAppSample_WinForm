@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using WinAppSample_WinForm.Business;
+using WinAppSample_WinForm.Service;
 
 
 namespace WinAppSample_WinForm.Applications
@@ -11,11 +13,21 @@ namespace WinAppSample_WinForm.Applications
 	/// </summary>
 	public partial class FrmMain : Form
 	{
+		#region enums
+		public enum OtherCalcPattern
+		{
+			Power,
+			Sin
+		}
+		#endregion
+
+
 		#region constants
 		private const string AdditionSign = "＋";
 		private const string SubtractionSign = "－";
 		private const string MultiplicationSign = "×";
 		private const string DivisionSign = "÷";
+		private const string PowerSign = "^";
 		private const int ValueTxtMaxLength = 7;
 
 		private const string NotNumericErrorMessage = "数値を入力して下さい";
@@ -49,6 +61,8 @@ namespace WinAppSample_WinForm.Applications
 			this.txtValue2.MaxLength = ValueTxtMaxLength;
 			this.valueTextBoxes = new List<TextBox>(new TextBox[] { this.txtValue1, this.txtValue2 });
 
+			var otherCalcPatternList = Enum.GetValues(typeof(OtherCalcPattern)).OfType<OtherCalcPattern>().Select(x => x.Name()).ToList();
+			this.cmbOtherCalcPattern.DataSource = otherCalcPatternList;
 
 			this.Initialize();
 		}
@@ -61,6 +75,14 @@ namespace WinAppSample_WinForm.Applications
 			if (this.rbtnAddition.Checked)
 			{
 				result = biz.Calculate(BizMain.CalculateType.Addition, values[0], values[1]);
+			} else if (this.rbtnOther.Checked)
+			{
+				switch ((OtherCalcPattern)this.cmbOtherCalcPattern.SelectedIndex)
+				{
+					case OtherCalcPattern.Power:
+						result = biz.Calculate(BizMain.CalculateType.Power, values[0], values[1]);
+						break;
+				}
 			}
 
 			this.lblResult.Text = result.ToString();
@@ -75,6 +97,8 @@ namespace WinAppSample_WinForm.Applications
 		{
 			RadioButton rbtn = (RadioButton)sender;
 			if (!rbtn.Checked) return;
+
+			this.cmbOtherCalcPattern.Enabled = this.rbtnOther.Checked;
 
 			switch (rbtn.Name)
 			{
@@ -94,10 +118,31 @@ namespace WinAppSample_WinForm.Applications
 					this.lblCalcSign1.Text = string.Empty;
 					this.lblCalcSign2.Text = DivisionSign;
 					break;
+				case nameof(this.rbtnOther):
+					this.OnOtherCalcPatternSelected();
+					break;
 			}
 
 			this.lblResult.Text = string.Empty;
 		}
+
+		private void cmbOtherCalcPattern_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var cmb = (ComboBox)sender;
+			if (cmb.SelectedIndex == -1) return;
+
+			var otherCalcPattern = (OtherCalcPattern)(cmb.SelectedIndex);
+			switch (otherCalcPattern)
+			{
+				case OtherCalcPattern.Power:
+					this.lblCalcSign1.Text = string.Empty;
+					this.lblCalcSign2.Text = PowerSign;
+					break;
+			}
+
+			this.lblResult.Text = string.Empty;
+		}
+
 
 		private void txtValue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
 		{
@@ -120,11 +165,17 @@ namespace WinAppSample_WinForm.Applications
 		#region private methods
 		private void Initialize()
 		{
+			this.cmbOtherCalcPattern.SelectedIndex = -1;
 			this.rbtnAddition.Checked = true;
 			this.txtValue1.Text = string.Empty;
 			this.txtValue2.Text = string.Empty;
 			this.lblResult.Text = string.Empty;
 			this.btnCalc.Enabled = false;
+		}
+
+		private void OnOtherCalcPatternSelected()
+		{
+
 		}
 		#endregion
 
