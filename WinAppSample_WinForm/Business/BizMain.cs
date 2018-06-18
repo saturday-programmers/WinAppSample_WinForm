@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using WinAppSample_WinForm.Services;
 
 
@@ -9,6 +11,13 @@ namespace WinAppSample_WinForm.Business
 	/// </summary>
 	public class BizMain
 	{
+		#region private fields
+		private Task<float> calcultionTask;
+		private CancellationTokenSource tokenSource;
+		//private CancellationToken cancelToken;
+		#endregion
+
+
 		#region enums
 		/// <summary>
 		/// 計算種別
@@ -29,6 +38,18 @@ namespace WinAppSample_WinForm.Business
 		#endregion
 
 
+		#region Constructors
+		public BizMain()
+		{
+			
+	}
+		#endregion
+
+		#region Properties
+		public bool IsCalculating => this.calcultionTask?.Status == TaskStatus.Running || this.calcultionTask?.Status == TaskStatus.WaitingToRun;
+		
+		#endregion
+
 		#region public methods
 		/// <summary>
 		/// 計算処理を行う
@@ -36,7 +57,7 @@ namespace WinAppSample_WinForm.Business
 		/// <param name="calculateType">計算種別</param>
 		/// <param name="values">計算対象の値</param>
 		/// <returns>計算結果</returns>
-		public float Calculate(CalculateType calculateType, params float[] values)
+		public async Task<float> CalculateAsync(CalculateType calculateType, params float[] values)
 		{
 			if (!this.HasCorrectParameterCount(calculateType, values))
 			{
@@ -55,9 +76,23 @@ namespace WinAppSample_WinForm.Business
 			}
 
 			var isValid = calculator?.Validate() ?? false;
-			var result = isValid ? calculator.Calculate() : 0;
+			if (isValid)
+			{
+				this.tokenSource = new CancellationTokenSource();
+				this.calcultionTask = Task.Run(() => calculator.Calculate(), this.tokenSource.Token);
+			}
+			else
+			{
+				this.calcultionTask = Task.FromResult(0f);
+			}
 
-			return result;
+			return await this.calcultionTask;
+		}
+
+		public void CancelCalculation()
+		{
+			this.tokenSource?.Cancel();
+			this.tokenSource?.Dispose();
 		}
 		#endregion
 

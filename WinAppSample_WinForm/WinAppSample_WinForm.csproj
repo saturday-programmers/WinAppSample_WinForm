@@ -64,17 +64,17 @@
     <Compile Include="Business\BizMain.cs" />
     <Compile Include="Service\PowerCalculator.cs" />
     <Compile Include="Service\AdditionCalculator.cs" />
-    <Compile Include="Form\FrmMain.cs">
+    <Compile Include="Presentation\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form\FrmMain.Designer.cs">
+    <Compile Include="Presentation\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Service\EnumExtension.cs" />
     <Compile Include="Service\ICalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form\FrmMain.resx">
+    <EmbeddedResource Include="Presentation\FrmMain.resx">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

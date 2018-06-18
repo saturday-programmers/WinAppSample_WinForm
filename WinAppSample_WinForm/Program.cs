@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using WinAppSample_WinForm.Applications;
-
+using WinAppSample_WinForm.Presentation;
 
 namespace WinAppSample_WinForm
 {

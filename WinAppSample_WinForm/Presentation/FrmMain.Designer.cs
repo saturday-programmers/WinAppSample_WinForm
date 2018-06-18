@@ -1,4 +1,4 @@
-﻿namespace WinAppSample_WinForm.Applications
+﻿namespace WinAppSample_WinForm.Presentation
 {
 	partial class FrmMain
 	{
@@ -45,8 +45,12 @@
 			this.btnClear = new System.Windows.Forms.Button();
 			this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
 			this.lblCalcSign1 = new System.Windows.Forms.Label();
+			this.statusStrip = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+			this.btnCancel = new System.Windows.Forms.Button();
 			this.groupBox.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
+			this.statusStrip.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// txtValue1
@@ -56,6 +60,7 @@
 			this.txtValue1.Size = new System.Drawing.Size(80, 19);
 			this.txtValue1.TabIndex = 0;
 			this.txtValue1.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.txtValue1.TextChanged += new System.EventHandler(this.txtValue_TextChanged);
 			this.txtValue1.Validating += new System.ComponentModel.CancelEventHandler(this.txtValue_Validating);
 			// 
 			// lblCalcSign2
@@ -75,6 +80,7 @@
 			this.txtValue2.Size = new System.Drawing.Size(80, 19);
 			this.txtValue2.TabIndex = 2;
 			this.txtValue2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.txtValue2.TextChanged += new System.EventHandler(this.txtValue_TextChanged);
 			this.txtValue2.Validating += new System.ComponentModel.CancelEventHandler(this.txtValue_Validating);
 			// 
 			// rbtnAddition
@@ -92,7 +98,7 @@
 			// rbtnSubtraction
 			// 
 			this.rbtnSubtraction.AutoSize = true;
-			this.rbtnSubtraction.Location = new System.Drawing.Point(131, 35);
+			this.rbtnSubtraction.Location = new System.Drawing.Point(154, 35);
 			this.rbtnSubtraction.Name = "rbtnSubtraction";
 			this.rbtnSubtraction.Size = new System.Drawing.Size(47, 16);
 			this.rbtnSubtraction.TabIndex = 4;
@@ -104,7 +110,7 @@
 			// rbtnMultiplication
 			// 
 			this.rbtnMultiplication.AutoSize = true;
-			this.rbtnMultiplication.Location = new System.Drawing.Point(219, 35);
+			this.rbtnMultiplication.Location = new System.Drawing.Point(265, 35);
 			this.rbtnMultiplication.Name = "rbtnMultiplication";
 			this.rbtnMultiplication.Size = new System.Drawing.Size(47, 16);
 			this.rbtnMultiplication.TabIndex = 5;
@@ -116,7 +122,7 @@
 			// rbtnDivision
 			// 
 			this.rbtnDivision.AutoSize = true;
-			this.rbtnDivision.Location = new System.Drawing.Point(307, 35);
+			this.rbtnDivision.Location = new System.Drawing.Point(376, 35);
 			this.rbtnDivision.Name = "rbtnDivision";
 			this.rbtnDivision.Size = new System.Drawing.Size(47, 16);
 			this.rbtnDivision.TabIndex = 6;
@@ -135,15 +141,16 @@
 			this.groupBox.Controls.Add(this.rbtnMultiplication);
 			this.groupBox.Location = new System.Drawing.Point(44, 54);
 			this.groupBox.Name = "groupBox";
-			this.groupBox.Size = new System.Drawing.Size(606, 84);
+			this.groupBox.Size = new System.Drawing.Size(684, 84);
 			this.groupBox.TabIndex = 7;
 			this.groupBox.TabStop = false;
 			this.groupBox.Text = "計算方法";
 			// 
 			// cmbOtherCalcPattern
 			// 
+			this.cmbOtherCalcPattern.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cmbOtherCalcPattern.FormattingEnabled = true;
-			this.cmbOtherCalcPattern.Location = new System.Drawing.Point(457, 34);
+			this.cmbOtherCalcPattern.Location = new System.Drawing.Point(550, 34);
 			this.cmbOtherCalcPattern.Name = "cmbOtherCalcPattern";
 			this.cmbOtherCalcPattern.Size = new System.Drawing.Size(112, 20);
 			this.cmbOtherCalcPattern.TabIndex = 8;
@@ -152,7 +159,7 @@
 			// rbtnOther
 			// 
 			this.rbtnOther.AutoSize = true;
-			this.rbtnOther.Location = new System.Drawing.Point(395, 35);
+			this.rbtnOther.Location = new System.Drawing.Point(487, 35);
 			this.rbtnOther.Name = "rbtnOther";
 			this.rbtnOther.Size = new System.Drawing.Size(54, 16);
 			this.rbtnOther.TabIndex = 7;
@@ -166,7 +173,7 @@
 			this.btnCalc.Font = new System.Drawing.Font("メイリオ", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.btnCalc.Location = new System.Drawing.Point(460, 175);
 			this.btnCalc.Name = "btnCalc";
-			this.btnCalc.Size = new System.Drawing.Size(92, 53);
+			this.btnCalc.Size = new System.Drawing.Size(86, 53);
 			this.btnCalc.TabIndex = 8;
 			this.btnCalc.Text = "計算";
 			this.btnCalc.UseVisualStyleBackColor = true;
@@ -195,9 +202,9 @@
 			// btnClear
 			// 
 			this.btnClear.Font = new System.Drawing.Font("メイリオ", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.btnClear.Location = new System.Drawing.Point(558, 175);
+			this.btnClear.Location = new System.Drawing.Point(642, 175);
 			this.btnClear.Name = "btnClear";
-			this.btnClear.Size = new System.Drawing.Size(92, 53);
+			this.btnClear.Size = new System.Drawing.Size(86, 53);
 			this.btnClear.TabIndex = 11;
 			this.btnClear.Text = "クリア";
 			this.btnClear.UseVisualStyleBackColor = true;
@@ -217,11 +224,39 @@
 			this.lblCalcSign1.Text = "+";
 			this.lblCalcSign1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// statusStrip
+			// 
+			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+			this.statusStrip.Location = new System.Drawing.Point(0, 264);
+			this.statusStrip.Name = "statusStrip";
+			this.statusStrip.Size = new System.Drawing.Size(752, 22);
+			this.statusStrip.TabIndex = 13;
+			this.statusStrip.Text = "statusStrip1";
+			// 
+			// toolStripStatusLabel
+			// 
+			this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+			this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+			// 
+			// btnCancel
+			// 
+			this.btnCancel.Font = new System.Drawing.Font("メイリオ", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.btnCancel.Location = new System.Drawing.Point(551, 175);
+			this.btnCancel.Name = "btnCancel";
+			this.btnCancel.Size = new System.Drawing.Size(86, 53);
+			this.btnCancel.TabIndex = 14;
+			this.btnCancel.Text = "中止";
+			this.btnCancel.UseVisualStyleBackColor = true;
+			this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+			// 
 			// FrmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(691, 314);
+			this.ClientSize = new System.Drawing.Size(752, 286);
+			this.Controls.Add(this.btnCancel);
+			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.lblCalcSign1);
 			this.Controls.Add(this.btnClear);
 			this.Controls.Add(this.lblResult);
@@ -237,6 +272,8 @@
 			this.groupBox.ResumeLayout(false);
 			this.groupBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
+			this.statusStrip.ResumeLayout(false);
+			this.statusStrip.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -260,6 +297,9 @@
 		private System.Windows.Forms.Label lblCalcSign1;
 		private System.Windows.Forms.ComboBox cmbOtherCalcPattern;
 		private System.Windows.Forms.RadioButton rbtnOther;
+		private System.Windows.Forms.StatusStrip statusStrip;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+		private System.Windows.Forms.Button btnCancel;
 	}
 }
 

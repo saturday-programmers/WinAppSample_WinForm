@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading;
 
 namespace WinAppSample_WinForm.Services
 {
@@ -37,6 +37,7 @@ namespace WinAppSample_WinForm.Services
 		/// <returns></returns>
 		public T Calculate()
 		{
+			Thread.Sleep(10000);
 			switch (this.value1)
 			{
 				case float floatVal1:
