@@ -27,9 +27,10 @@
 
 ## サンプルについて
 ### 環境
-- .NET Framework 4.7.1
-- C# 7.3
-- 3層アーキテクチャ
+![](https://img.shields.io/badge/.NET%20Framework-4.7.1-2E9AFE.svg)
+![](https://img.shields.io/badge/C%23-7.3-8904B1.svg)  
+
+3層アーキテクチャ
 
 ### 参考ポイント
 C#の各文法の特徴的な部分をできるだけ使うようにしてみました。  
