@@ -45,6 +45,9 @@ namespace WinAppSample_WinForm.Presentation
 		#endregion
 
 		#region enums
+		/// <summary>
+		/// その他の計算パターン
+		/// </summary>
 		public enum OtherCalcPattern
 		{
 			Power,
@@ -118,7 +121,7 @@ namespace WinAppSample_WinForm.Presentation
 
 		private async void btnCancel_Click(object sender, EventArgs e)
 		{
-			await this.CancelCalculation();
+			await this.CancelCalculationAsync();
 		}
 
 		private void btnClear_Click(object sender, EventArgs e)
@@ -146,12 +149,12 @@ namespace WinAppSample_WinForm.Presentation
 			var setSignAction = this.rbtnOther.Checked ? new Action(this.SetOtherCalcPatternSign) : new Action(this.SetRegularCalcPatternSign);
 			var getInputValueCntFunc = this.rbtnOther.Checked ? new Func<int>(GetInputValueCntOnOtherCalcPattern) : new Func<int>(this.GetInputValueCntOnRegularCalcPattern);
 
-			this.OnCalcPatternChanedAsync(setSignAction, getInputValueCntFunc);
+			this.OnCalcPatternChanged(setSignAction, getInputValueCntFunc);
 		}
 
 		private void cmbOtherCalcPattern_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			this.OnCalcPatternChanedAsync(this.SetOtherCalcPatternSign, this.GetInputValueCntOnOtherCalcPattern);
+			this.OnCalcPatternChanged(this.SetOtherCalcPatternSign, this.GetInputValueCntOnOtherCalcPattern);
 		}
 
 		private void txtValue_TextChanged(object sender, EventArgs e)
@@ -175,7 +178,7 @@ namespace WinAppSample_WinForm.Presentation
 			this.rbtnAddition.Checked = true;
 		}
 
-		private void OnCalcPatternChanedAsync(Action setSignAction, Func<int> getInputValueCntFunc)
+		private void OnCalcPatternChanged(Action setSignAction, Func<int> getInputValueCntFunc)
 		{
 			// 算術記号設定
 			setSignAction();
@@ -246,7 +249,7 @@ namespace WinAppSample_WinForm.Presentation
 
 			foreach (var txt in targets)
 			{
-				if (txt.Text.Length == 0 || float.TryParse(txt.Text, out var _))
+				if (string.IsNullOrEmpty(txt.Text) || float.TryParse(txt.Text, out var _))
 				{
 					// エラー情報クリア
 					this.errorProvider.SetError(txt, string.Empty);
@@ -277,7 +280,7 @@ namespace WinAppSample_WinForm.Presentation
 			this.btnCancel.Enabled = isCalculating;
 		}
 
-		private Task CancelCalculation()
+		private async Task CancelCalculationAsync()
 		{
 			Task waitTask = Task.CompletedTask;
 			if (this.biz.IsCalculating)
@@ -291,7 +294,7 @@ namespace WinAppSample_WinForm.Presentation
 				}
 				else
 				{
-					return Task.CompletedTask;
+					return;
 				}
 			}
 
@@ -302,7 +305,7 @@ namespace WinAppSample_WinForm.Presentation
 											});
 
 			//　キャンセル処理と待機処理両方が完了後にステータスバーのメッセージをクリアするタスクを返却
-			return Task.WhenAll(cancelTask, waitTask).ContinueWith((_) => this.toolStripStatusLabel.Text = string.Empty);
+			await Task.WhenAll(cancelTask, waitTask).ContinueWith((_) => this.Invoke(new Action(() => this.toolStripStatusLabel.Text = string.Empty)));
 		}
 		#endregion
 	}

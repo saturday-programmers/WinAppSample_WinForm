@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 計算処理のインターフェース
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
+	/// <typeparam name="T">解の型</typeparam>
 	interface ICalculator<T> where T : struct
 	{
 		/// <summary>

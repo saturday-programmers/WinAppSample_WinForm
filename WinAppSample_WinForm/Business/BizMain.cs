@@ -14,9 +14,7 @@ namespace WinAppSample_WinForm.Business
 		#region private fields
 		private Task<float> calcultionTask;
 		private CancellationTokenSource tokenSource;
-		//private CancellationToken cancelToken;
 		#endregion
-
 
 		#region enums
 		/// <summary>
@@ -35,14 +33,6 @@ namespace WinAppSample_WinForm.Business
 			/// <summary>べき乗</summary>
 			Power
 		}
-		#endregion
-
-
-		#region Constructors
-		public BizMain()
-		{
-			
-	}
 		#endregion
 
 		#region Properties
@@ -89,13 +79,15 @@ namespace WinAppSample_WinForm.Business
 			return await this.calcultionTask;
 		}
 
+		/// <summary>
+		/// 実行中の計算処理を停止する。
+		/// </summary>
 		public void CancelCalculation()
 		{
 			this.tokenSource?.Cancel();
 			this.tokenSource?.Dispose();
 		}
 		#endregion
-
 
 		#region private methods
 		private bool HasCorrectParameterCount(CalculateType calculateType, params float[] values)
