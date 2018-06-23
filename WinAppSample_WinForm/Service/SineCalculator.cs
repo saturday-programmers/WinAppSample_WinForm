@@ -1,30 +1,27 @@
 ﻿using System;
-using System.Threading;
+using WinAppSample_WinForm.Service;
 
 
 namespace WinAppSample_WinForm.Services
 {
 	/// <summary>
-	/// べき乗の計算を行うクラス
+	/// Sine関数の計算を行うクラス
 	/// </summary>
-	/// <typeparam name="T">底、指数、解の型</typeparam>
-	public class PowerCalculator<T> : ICalculator<T> where T : struct
+	/// <typeparam name="T">角度の型</typeparam>
+	public class SineCalculator<T> : ICalculator<T> where T : struct
 	{
 		#region private fields
-		private T value1;
-		private T value2;
+		private T degree;
 		#endregion
 
 		#region constructors
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="value1">底</param>
-		/// <param name="value2">指数</param>
-		public PowerCalculator(T value1, T value2)
+		/// <param name="degree">角度</param>
+		public SineCalculator(T degree)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
+			this.degree = degree;
 		}
 		#endregion
 
@@ -46,15 +43,19 @@ namespace WinAppSample_WinForm.Services
 		/// <returns>計算結果の値</returns>
 		public T Calculate()
 		{
-			Thread.Sleep(10000);
-			switch (this.value1)
+			switch (this.degree)
 			{
-				case float floatVal1:
-					return (T)(object)Convert.ToSingle(Math.Pow(floatVal1, (float)(object)this.value2));
+				case float floatDegree:
+					return (T)(object)Convert.ToSingle(Math.Sin(MathUtil.AngleToRadian(floatDegree)));
 				default:
 					throw new NotImplementedException();
 			}
 		}
 		#endregion
+
 	}
 }
+
+
+
+

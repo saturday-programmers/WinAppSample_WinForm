@@ -19,8 +19,8 @@ namespace WinAppSample_WinForm.Service
 			{
 				case OtherCalcPattern.Power:
 					return "べき乗";
-				case OtherCalcPattern.Sin:
-					return "Sin";
+				case OtherCalcPattern.Sine:
+					return "sin";
 				default:
 					return string.Empty;
 			}

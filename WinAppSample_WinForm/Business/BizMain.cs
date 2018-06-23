@@ -31,7 +31,9 @@ namespace WinAppSample_WinForm.Business
 			/// <summary>除残</summary>
 			Division,
 			/// <summary>べき乗</summary>
-			Power
+			Power,
+			/// <summary>Sine</summary>
+			Sine,
 		}
 		#endregion
 
@@ -63,17 +65,20 @@ namespace WinAppSample_WinForm.Business
 				case CalculateType.Power:
 					calculator = new PowerCalculator<float>(values[0], values[1]);
 					break;
+				case CalculateType.Sine:
+					calculator = new SineCalculator<float>(values[0]);
+					break;
 			}
 
-			var isValid = calculator?.Validate() ?? false;
-			if (isValid)
+			string errorMessage;
+			if (calculator.Validate(out errorMessage))
 			{
 				this.tokenSource = new CancellationTokenSource();
 				this.calcultionTask = Task.Run(() => calculator.Calculate(), this.tokenSource.Token);
 			}
 			else
 			{
-				this.calcultionTask = Task.FromResult(0f);
+				this.calcultionTask = Task.FromException<float>(new ApplicationException(errorMessage));
 			}
 
 			return await this.calcultionTask;
@@ -92,16 +97,19 @@ namespace WinAppSample_WinForm.Business
 		#region private methods
 		private bool HasCorrectParameterCount(CalculateType calculateType, params float[] values)
 		{
-			bool ret = false;
+			int count = 0;
 			switch (calculateType)
 			{
 				case CalculateType.Addition:
 				case CalculateType.Power:
-					ret = (values.Length == 2);
+					count = 2;
+					break;
+				case CalculateType.Sine:
+					count = 1;
 					break;
 			}
 
-			return ret;
+			return (values.Length == count);
 		}
 		#endregion
 	}

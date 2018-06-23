@@ -21,6 +21,7 @@ namespace WinAppSample_WinForm.Presentation
 		private const string MultiplicationSign = "×";
 		private const string DivisionSign = "÷";
 		private const string PowerSign = "^";
+		private const string SineSign = "sin";
 		private const int ValueTxtMaxLength = 7;
 
 		private const string NotNumericErrorMessage = "数値を入力して下さい";
@@ -51,7 +52,7 @@ namespace WinAppSample_WinForm.Presentation
 		public enum OtherCalcPattern
 		{
 			Power,
-			Sin
+			Sine
 		}
 		#endregion
 
@@ -82,11 +83,6 @@ namespace WinAppSample_WinForm.Presentation
 
 		private async void btnCalc_Click(object sender, EventArgs e)
 		{
-			// クリアボタン以外は入力不可にする
-			this.ControlEnabledAll(true);
-
-			var values = this.InputtableTextBoxes.Select(x => x.Text.Length > 0 ? float.Parse(x.Text) : 0).ToArray();
-
 			// 選択されている計算パターンとビジネスクラスの計算パターンを紐づける
 			BizMain.CalculateType calcType;
 			if (this.rbtnAddition.Checked)
@@ -100,6 +96,9 @@ namespace WinAppSample_WinForm.Presentation
 					case OtherCalcPattern.Power:
 						calcType = BizMain.CalculateType.Power;
 						break;
+					case OtherCalcPattern.Sine:
+						calcType = BizMain.CalculateType.Sine;
+						break;
 					default:
 						return;
 				}
@@ -109,11 +108,24 @@ namespace WinAppSample_WinForm.Presentation
 				return;
 			}
 
+			// クリアボタン以外は入力不可にする
+			this.ControlEnabledAll(true);
+
+			var values = this.InputtableTextBoxes.Select(x => x.Text.Length > 0 ? float.Parse(x.Text) : 0).ToArray();
+
 			this.toolStripStatusLabel.Text = CalculatingMessage;
 			//　非同期で計算実行
-			var result = await biz.CalculateAsync(calcType, values);
-			this.lblResult.Text = result.ToString();
-			this.toolStripStatusLabel.Text = string.Empty;
+			try
+			{
+				var result = await biz.CalculateAsync(calcType, values);
+				this.lblResult.Text = result.ToString("#,##0." + new string('#', ValueTxtMaxLength));
+				this.toolStripStatusLabel.Text = string.Empty;
+			}
+			catch (ApplicationException ex)
+			{
+				// 業務エラー発生時は内容をステータスバーに表示
+				this.toolStripStatusLabel.Text = ex.Message;
+			}
 
 			// 入力可能に戻す
 			this.ControlEnabledAll(false);
@@ -216,6 +228,10 @@ namespace WinAppSample_WinForm.Presentation
 					this.lblCalcSign1.Text = string.Empty;
 					this.lblCalcSign2.Text = PowerSign;
 					break;
+				case OtherCalcPattern.Sine:
+					this.lblCalcSign1.Text = SineSign + "(";
+					this.lblCalcSign2.Text = "°)";
+					break;
 			}
 		}
 
@@ -233,6 +249,9 @@ namespace WinAppSample_WinForm.Presentation
 				case OtherCalcPattern.Power:
 					ret = 2;
 					break;
+				case OtherCalcPattern.Sine:
+					ret = 1;
+					break;
 			}
 			return ret;
 		}
@@ -240,7 +259,7 @@ namespace WinAppSample_WinForm.Presentation
 		private void EnableTextBoxes(int count)
 		{
 			this.valueTextBoxes.Take(count).ToList().ForEach(x => x.Enabled = true);
-			this.valueTextBoxes.Skip(count).ToList().ForEach(x => x.Enabled = false);
+			this.valueTextBoxes.Skip(count).ToList().ForEach(x => { x.Enabled = false; x.Text = string.Empty; });
 		}
 
 		private void Validate(TextBox targetTxt = null)

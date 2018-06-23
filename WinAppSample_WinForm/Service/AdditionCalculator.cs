@@ -31,8 +31,13 @@ namespace WinAppSample_WinForm.Services
 		/// <summary>
 		/// 計算対象の値の検証を行う
 		/// </summary>
-		/// <returns></returns>
-		public bool Validate() => true;
+		/// <param name="errorMessage">エラーメッセージ</param>
+		/// <returns>検証結果</returns>
+		public bool Validate(out string errorMessage)
+		{
+			errorMessage = null;
+			return true;
+		}
 
 		/// <summary>
 		/// 計算を行う
