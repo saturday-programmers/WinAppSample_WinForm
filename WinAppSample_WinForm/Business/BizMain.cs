@@ -49,7 +49,7 @@ namespace WinAppSample_WinForm.Business
 		/// <param name="calculateType">計算種別</param>
 		/// <param name="values">計算対象の値</param>
 		/// <returns>計算結果</returns>
-		public async Task<float> CalculateAsync(CalculateType calculateType, params float[] values)
+		public Task<float> CalculateAsync(CalculateType calculateType, params float[] values)
 		{
 			if (!this.HasCorrectParameterCount(calculateType, values))
 			{
@@ -61,6 +61,9 @@ namespace WinAppSample_WinForm.Business
 			{
 				case CalculateType.Addition:
 					calculator = new AdditionCalculator<float>(values[0], values[1]);
+					break;
+				case CalculateType.Division:
+					calculator = new DivisionCalculator<float>(values[0], values[1]);
 					break;
 				case CalculateType.Power:
 					calculator = new PowerCalculator<float>(values[0], values[1]);
@@ -81,7 +84,7 @@ namespace WinAppSample_WinForm.Business
 				this.calcultionTask = Task.FromException<float>(new ApplicationException(errorMessage));
 			}
 
-			return await this.calcultionTask;
+			return this.calcultionTask;
 		}
 
 		/// <summary>
@@ -101,6 +104,7 @@ namespace WinAppSample_WinForm.Business
 			switch (calculateType)
 			{
 				case CalculateType.Addition:
+				case CalculateType.Division:
 				case CalculateType.Power:
 					count = 2;
 					break;

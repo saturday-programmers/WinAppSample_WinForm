@@ -1,29 +1,30 @@
 ﻿using System;
+using System.Threading;
 
 
 namespace WinAppSample_WinForm.Services
 {
 	/// <summary>
-	/// 加算処理を行うクラス
+	/// 除算処理を行うクラス
 	/// </summary>
-	/// <typeparam name="T">被加数、加数、解の型</typeparam>
-	public class AdditionCalculator<T> : ICalculator<T> where T : struct
+	/// <typeparam name="T">被除数、除数、解の型</typeparam>
+	public class DivisionCalculator<T> : ICalculator<T> where T : struct
 	{
 		#region private fields
-		private T augend;
-		private T addend;
+		private T dividend;
+		private T divisor;
 		#endregion
 
 		#region constructors
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="augend">被加数</param>
-		/// <param name="addend">加数</param>
-		public AdditionCalculator(T augend, T addend)
+		/// <param name="dividend">被除数</param>
+		/// <param name="divisor">除数</param>
+		public DivisionCalculator(T dividend, T divisor)
 		{
-			this.augend = augend;
-			this.addend = addend;
+			this.dividend = dividend;
+			this.divisor = divisor;
 		}
 		#endregion
 
@@ -36,7 +37,11 @@ namespace WinAppSample_WinForm.Services
 		public bool Validate(out string errorMessage)
 		{
 			errorMessage = null;
-			return true;
+			if (double.Parse(this.divisor.ToString()) == 0)
+			{
+				errorMessage = "0で割ることはできません。";
+			}
+			return (errorMessage == null);
 		}
 
 		/// <summary>
@@ -45,10 +50,10 @@ namespace WinAppSample_WinForm.Services
 		/// <returns>計算結果の値</returns>
 		public T Calculate()
 		{
-			switch (this.augend)
+			switch (this.dividend)
 			{
-				case float floatAugend:
-					return (T)(object)(floatAugend + (float)(object)this.addend);
+				case float floatDividend:
+					return (T)(object)(floatDividend / (float)(object)this.divisor);
 				default:
 					throw new NotImplementedException();
 			}

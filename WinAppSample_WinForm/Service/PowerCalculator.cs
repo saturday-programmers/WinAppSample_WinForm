@@ -5,26 +5,26 @@ using System.Threading;
 namespace WinAppSample_WinForm.Services
 {
 	/// <summary>
-	/// べき乗の計算を行うクラス
+	/// べき乗の計算処理を行うクラス
 	/// </summary>
 	/// <typeparam name="T">底、指数、解の型</typeparam>
 	public class PowerCalculator<T> : ICalculator<T> where T : struct
 	{
 		#region private fields
-		private T value1;
-		private T value2;
+		private T baseValue;
+		private T exponent;
 		#endregion
 
 		#region constructors
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
-		/// <param name="value1">底</param>
-		/// <param name="value2">指数</param>
-		public PowerCalculator(T value1, T value2)
+		/// <param name="baseValue">底</param>
+		/// <param name="exponent">指数</param>
+		public PowerCalculator(T baseValue, T exponent)
 		{
-			this.value1 = value1;
-			this.value2 = value2;
+			this.baseValue = baseValue;
+			this.exponent = exponent;
 		}
 		#endregion
 
@@ -47,10 +47,10 @@ namespace WinAppSample_WinForm.Services
 		public T Calculate()
 		{
 			Thread.Sleep(10000);
-			switch (this.value1)
+			switch (this.baseValue)
 			{
-				case float floatVal1:
-					return (T)(object)Convert.ToSingle(Math.Pow(floatVal1, (float)(object)this.value2));
+				case float floatBaseValue:
+					return (T)(object)Convert.ToSingle(Math.Pow(floatBaseValue, (float)(object)this.exponent));
 				default:
 					throw new NotImplementedException();
 			}

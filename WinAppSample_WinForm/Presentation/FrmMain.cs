@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinAppSample_WinForm.Business;
 using WinAppSample_WinForm.Service;
+using static WinAppSample_WinForm.Business.BizMain;
 
 
 namespace WinAppSample_WinForm.Presentation
@@ -84,40 +85,22 @@ namespace WinAppSample_WinForm.Presentation
 		private async void btnCalc_Click(object sender, EventArgs e)
 		{
 			// 選択されている計算パターンとビジネスクラスの計算パターンを紐づける
-			BizMain.CalculateType calcType;
-			if (this.rbtnAddition.Checked)
-			{
-				calcType = BizMain.CalculateType.Addition;
-			}
-			else if (this.rbtnOther.Checked)
-			{
-				switch ((OtherCalcPattern)this.cmbOtherCalcPattern.SelectedIndex)
-				{
-					case OtherCalcPattern.Power:
-						calcType = BizMain.CalculateType.Power;
-						break;
-					case OtherCalcPattern.Sine:
-						calcType = BizMain.CalculateType.Sine;
-						break;
-					default:
-						return;
-				}
-			}
-			else
+			var calcType = this.DetermineCalculateType();
+			if (!calcType.HasValue)
 			{
 				return;
 			}
 
 			// クリアボタン以外は入力不可にする
-			this.ControlEnabledAll(true);
+			this.ControlAllEnabledProperty(true);
 
-			var values = this.InputtableTextBoxes.Select(x => x.Text.Length > 0 ? float.Parse(x.Text) : 0).ToArray();
+			var values = this.InputtableTextBoxes.Select(x => !string.IsNullOrEmpty(x.Text) ? float.Parse(x.Text) : 0).ToArray();
 
 			this.toolStripStatusLabel.Text = CalculatingMessage;
-			//　非同期で計算実行
+			// 非同期で計算実行
 			try
 			{
-				var result = await biz.CalculateAsync(calcType, values);
+				var result = await biz.CalculateAsync(calcType.Value, values);
 				this.lblResult.Text = result.ToString("#,##0." + new string('#', ValueTxtMaxLength));
 				this.toolStripStatusLabel.Text = string.Empty;
 			}
@@ -128,7 +111,7 @@ namespace WinAppSample_WinForm.Presentation
 			}
 
 			// 入力可能に戻す
-			this.ControlEnabledAll(false);
+			this.ControlAllEnabledProperty(false);
 		}
 
 		private async void btnCancel_Click(object sender, EventArgs e)
@@ -284,7 +267,7 @@ namespace WinAppSample_WinForm.Presentation
 			this.btnCalc.Enabled = this.InputtableTextBoxes.ToList().TrueForAll(x => x.Text.Length > 0 && this.errorProvider.GetError(x) == string.Empty);
 		}
 
-		private void ControlEnabledAll(bool isCalculating)
+		private void ControlAllEnabledProperty(bool isCalculating)
 		{
 			this.rbtnAddition.Enabled = !isCalculating;
 			this.rbtnSubtraction.Enabled = !isCalculating;
@@ -297,6 +280,33 @@ namespace WinAppSample_WinForm.Presentation
 			this.btnCalc.Enabled = !isCalculating;
 			this.btnClear.Enabled = !isCalculating;
 			this.btnCancel.Enabled = isCalculating;
+		}
+
+		private CalculateType? DetermineCalculateType()
+		{
+			CalculateType? calcType = null;
+			if (this.rbtnAddition.Checked)
+			{
+				calcType = CalculateType.Addition;
+			}
+			else if(this.rbtnDivision.Checked)
+			{
+				calcType = CalculateType.Division;
+			}
+			else if (this.rbtnOther.Checked)
+			{
+				switch ((OtherCalcPattern)this.cmbOtherCalcPattern.SelectedIndex)
+				{
+					case OtherCalcPattern.Power:
+						calcType = CalculateType.Power;
+						break;
+					case OtherCalcPattern.Sine:
+						calcType = CalculateType.Sine;
+						break;
+				}
+			}
+
+			return calcType;
 		}
 
 		private async Task CancelCalculationAsync()
@@ -320,7 +330,7 @@ namespace WinAppSample_WinForm.Presentation
 			var cancelTask = Task.Run(() => {
 												this.biz.CancelCalculation();
 												// UIスレッドでコントロール活性制御
-												this.Invoke(new Action(() => this.ControlEnabledAll(false)));
+												this.Invoke(new Action(() => this.ControlAllEnabledProperty(false)));
 											});
 
 			//　キャンセル処理と待機処理両方が完了後にステータスバーのメッセージをクリアするタスクを返却
