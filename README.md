@@ -33,64 +33,87 @@
 3層アーキテクチャ
 
 ### 参考ポイント
-C#の各文法の特徴的な部分をできるだけ使うようにしてみました。  
+C#の文法やWindowsFormsの特徴的な記述をできるだけ使うようにしてみました。  
 辞書的に参考にする場合はそれぞれ以下の箇所を見て下さい。
 
-#### プロパティ
-- FrmMain.InputtableTextBoxes
-- BizMain.IsCalculating
+#### C#文法
+- プロパティ
+    - FrmMain.InputtableTextBoxes
+    - BizMain.IsCalculating
+- イベントハンドラ
+    - FrmMain.frmMain_Load()
+    - FrmMain.btnCalc_Click()
+    - FrmMain.btnCancel_Click()
+    - FrmMain.btnClear_Click()
+    - FrmMain.rbtnCalcPattern_CheckedChanged()
+    - FrmMain.cmbOtherCalcPattern_SelectedIndexChanged()
+    - FrmMain.txtValue_TextChanged()
+    - FrmMain.txtValue_Validating()
+- 静的クラス
+    - MathUtil
+-　例外
+    - FrmMain.btnCalc_Click()
+    - BizMain.CalculateAsync()
+    - AdditionCalculator<T>.Calculate()
+    - AdditionCalculator<T>.Calculate()
+    - MultiplicationCalculator<T>.Calculate()
+    - DivisionCalculator<T>.Calculate()
+    - PowerCalculator<T>.Calculate()
+    - SineCalculator<T>.Calculate()
+    - CosineCalculator<T>.Calculate()
+- インターフェース
+    - ICalculator<T>
+- デリゲート
+    - FrmMain.rbtnCalcPattern_CheckedChanged()
+- ジェネリック
+    - ICalculator<T>
+- 拡張メソッド
+    - EnumExtension.Name()
+- LINQ
+    - FrmMain.frmMain_Load()
+    - FrmMain.InputtableTextBoxes
+    - FrmMain.btnCalc_Click()
+    - FrmMain.EnableTextBoxes()
+    - FrmMain.Validate()
+    - FrmMain.ControlAllEnabledProperty()
+    - FrmMain.CancelCalculationAsync()
+- 非同期
+    - FrmMain.btnCalc_Click()
+    - FrmMain.btnCancel_Click()
+    - FrmMain.CancelCalculationAsync()
+    - BizMain.IsCalculating
+    - BizMain.CalculateAsync()
+    - BizMain.CancelCalculation()
+- ヴァリデーション
+    - FrmMain.Validate()
+- 可変長引数
+    - BizMain.CalculateAsync()
+    - BizMain.HasCorrectParameterCount()
+    - BizMain.CreateCalculator()
+- 出力引数
+    - FrmMain.Validate()
+    - DivisionCalculator<T>.Validate()
+- オプション引数
+    - FrmMain.Validate()
+- Null許容型
+    - FrmMain.btnCalc_Click()
+    - FrmMain.DetermineCalculateType()
+- 型スイッチ
+    - AdditionCalculator<T>.Calculate.Calculate()
+- 式中での変数宣言
+    - FrmMain.Validate()
 
-#### イベントハンドラ
-- FrmMain.btnCalc_Click()
-- FrmMain.btnCancel_Click()
-- FrmMain.btnClear_Click()
-- FrmMain.rbtnCalcPattern_CheckedChanged()
-- FrmMain.cmbOtherCalcPattern_SelectedIndexChanged
-- FrmMain.txtValue_TextChanged()
-
-#### コントロールへのアクセス
-- FrmMain.rbtnCalcPattern_CheckedChanged()
-- FrmMain.txtValue_TextChanged()
-- FrmMain.Initialize()
-- FrmMain.SetRegularCalcPatternSign()
-- FrmMain.SetOtherCalcPatternSign()
-- FrmMain.Validate()
-- FrmMain.ControlEnabledAll()
-
-#### インターフェース
-- ICalculator<T>
-
-#### デリゲート
-- FrmMain.rbtnCalcPattern_CheckedChanged()
-
-#### ジェネリック
-- AdditionCalculator<T>
-- PowerCalculator<T>
-
-#### 拡張メソッド
-- EnumExtension.Name()
-
-#### LINQ
-- FrmMain.btnCalc_Click()
-- FrmMain.EnableTextBoxes()
-- FrmMain.Validate()
-- FrmMain.ControlEnabledAll()
-
-#### 非同期
-- FrmMain.btnCalc_Click()
-- FrmMain.btnCancel_Click()
-- FrmMain.CancelCalculationAsync()
-- BizMain.CalculateAsync()
-
-#### ヴァリデーション
-- FrmMain.Validate()
-
-#### 可変長引数
-- BizMain.CalculateAsync()
-- BizMain.HasCorrectParameterCount()
-
-#### 出力引数
-- FrmMain.Validate()
-
-#### オプション引数
-- FrmMain.Validate()
+#### WindowsForms
+-  コントロールへのアクセス
+    - FrmMain.frmMain_Load()
+    - FrmMain.btnCalc_Click()
+    - FrmMain.rbtnCalcPattern_CheckedChanged()
+    - FrmMain.txtValue_TextChanged()
+    - FrmMain.Initialize()
+    - FrmMain.OnCalcPatternChanged()
+    - FrmMain.SetRegularCalcPatternSign()
+    - FrmMain.SetOtherCalcPatternSign()
+    - FrmMain.Validate()
+    - FrmMain.ControlAllEnabledProperty()
+- メッセージボックス
+    - FrmMain.CancelCalculationAsync()
