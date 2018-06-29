@@ -268,7 +268,8 @@
 			this.Controls.Add(this.txtValue1);
 			this.Name = "FrmMain";
 			this.Text = "Form1";
-			this.Load += new System.EventHandler(this.frmMain_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FrmMain_FormClosing);
+			this.Load += new System.EventHandler(this.FrmMain_Load);
 			this.groupBox.ResumeLayout(false);
 			this.groupBox.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();

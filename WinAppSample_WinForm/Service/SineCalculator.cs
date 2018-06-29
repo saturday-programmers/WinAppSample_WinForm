@@ -46,7 +46,7 @@ namespace WinAppSample_WinForm.Services
 			switch (this.degree)
 			{
 				case float floatDegree:
-					return (T)(object)Convert.ToSingle(Math.Sin(MathUtil.AngleToRadian(floatDegree)));
+					return (T)(object)Convert.ToSingle(Math.Sin(MathUtil.DegreeToRadian(floatDegree)));
 				default:
 					throw new NotImplementedException();
 			}

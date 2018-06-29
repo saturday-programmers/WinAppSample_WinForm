@@ -39,9 +39,8 @@ namespace WinAppSample_WinForm.Business
 		}
 		#endregion
 
-		#region Properties
+		#region public properties
 		public bool IsCalculating => this.calcultionTask?.Status == TaskStatus.Running || this.calcultionTask?.Status == TaskStatus.WaitingToRun;
-		
 		#endregion
 
 		#region public methods
@@ -71,6 +70,7 @@ namespace WinAppSample_WinForm.Business
 			{
 				// 処理キャンセル時に必要なオブジェクトを保持しておく
 				this.tokenSource = new CancellationTokenSource();
+				this.tokenSource.Token.ThrowIfCancellationRequested();
 				// 非同期で計算処理実行
 				// 既定ではオーバーフロー時に例外は発生しないので(unchecked)考慮しない
 				this.calcultionTask = Task.Run(() => calculator.Calculate(), this.tokenSource.Token);
@@ -88,8 +88,11 @@ namespace WinAppSample_WinForm.Business
 		/// </summary>
 		public void CancelCalculation()
 		{
-			this.tokenSource?.Cancel();
-			this.tokenSource?.Dispose();
+			if (!this.tokenSource?.IsCancellationRequested ?? true)
+			{
+				this.tokenSource?.Cancel(true);
+				this.tokenSource?.Dispose();
+			}
 		}
 		#endregion
 

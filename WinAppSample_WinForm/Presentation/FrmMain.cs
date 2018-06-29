@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -59,12 +60,14 @@ namespace WinAppSample_WinForm.Presentation
 		}
 		#endregion
 
-		#region properties
+		#region private properties
 		private IEnumerable<TextBox> InputtableTextBoxes => this.valueTextBoxes.Where(x => x.Enabled);
 		#endregion
 
 		#region event handlers
-		private void frmMain_Load(object sender, EventArgs e)
+
+		#region form
+		private void FrmMain_Load(object sender, EventArgs e)
 		{
 			// アセンブリ名のカンマまでをシステム名としてタイトルバーに記載
 			this.Text = new string(Assembly.GetEntryAssembly().FullName.TakeWhile(x => x != ',').ToArray());
@@ -75,7 +78,7 @@ namespace WinAppSample_WinForm.Presentation
 			this.txtValue2.MaxLength = ValueTxtMaxLength;
 			this.valueTextBoxes = new List<TextBox>(new TextBox[] { this.txtValue1, this.txtValue2 });
 
-			// 　OtherCalcPattern列挙型の全ての列挙子をリストにしたものをコンボボックスのデータソースに設定
+			// OtherCalcPattern列挙型の全ての列挙子をリストにしたものをコンボボックスのデータソースに設定
 			var otherCalcPatternList = Enum.GetValues(typeof(OtherCalcPattern)).OfType<OtherCalcPattern>().Select(x => x.Name()).ToList();
 			this.cmbOtherCalcPattern.DataSource = otherCalcPatternList;
 
@@ -84,6 +87,20 @@ namespace WinAppSample_WinForm.Presentation
 			this.Initialize();
 		}
 
+		private void FrmMain_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			// 計算処理中の場合はキャンセル処理を同期的に実行
+			if (this.biz.IsCalculating)
+			{
+				if (!this.CancelCalculationAsync(true).Result)
+				{
+					e.Cancel = true;
+				}
+			}
+		}
+		#endregion
+
+		#region buttons
 		private async void btnCalc_Click(object sender, EventArgs e)
 		{
 			// 選択されている計算パターンとビジネスクラスの計算パターンを紐づける
@@ -111,6 +128,14 @@ namespace WinAppSample_WinForm.Presentation
 				// 業務エラー発生時は内容をステータスバーに表示
 				this.toolStripStatusLabel.Text = ex.Message;
 			}
+			catch (AggregateException ex)
+			{
+				// タスクキャンセルによる例外発生時は処理続行
+				if (!ex.InnerExceptions.Any(x => x is TaskCanceledException))
+				{
+					throw;
+				}
+			}
 
 			// 入力可能に戻す
 			this.ControlAllEnabledProperty(false);
@@ -125,7 +150,9 @@ namespace WinAppSample_WinForm.Presentation
 		{
 			this.Initialize();
 		}
+		#endregion
 
+		#region radio buttons
 		private void rbtnCalcPattern_CheckedChanged(object sender, EventArgs e)
 		{
 			RadioButton rbtn = (RadioButton)sender;
@@ -148,22 +175,27 @@ namespace WinAppSample_WinForm.Presentation
 
 			this.OnCalcPatternChanged(setSignAction, getInputValueCntFunc);
 		}
+		#endregion
 
+		#region combo boxes
 		private void cmbOtherCalcPattern_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.OnCalcPatternChanged(this.SetOtherCalcPatternSign, this.GetInputValueCntOnOtherCalcPattern);
 		}
+		#endregion
 
+		#region text boxes
 		private void txtValue_TextChanged(object sender, EventArgs e)
 		{
 			this.lblResult.Text = string.Empty;
 		}
 
-		private void txtValue_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void txtValue_Validating(object sender, CancelEventArgs e)
 		{
 			TextBox txt = (TextBox)sender;
 			this.Validate(txt);
 		}
+		#endregion
 		#endregion
 
 		#region private methods
@@ -327,7 +359,7 @@ namespace WinAppSample_WinForm.Presentation
 			return calcType;
 		}
 
-		private async Task CancelCalculationAsync()
+		private Task<bool> CancelCalculationAsync(bool isClosingWindow = false)
 		{
 			Task waitTask = Task.CompletedTask;
 			if (this.biz.IsCalculating)
@@ -341,18 +373,32 @@ namespace WinAppSample_WinForm.Presentation
 				}
 				else
 				{
-					return;
+					return Task.FromResult(false);
 				}
 			}
+			else
+			{
+				return Task.FromResult(true);
+			}
 
-			var cancelTask = Task.Run(() => {
-												this.biz.CancelCalculation();
-												// UIスレッドでコントロール活性制御
-												this.Invoke(new Action(() => this.ControlAllEnabledProperty(false)));
-											});
+			var cancelTask = Task.Run(() =>
+			{
+				this.biz.CancelCalculation();
+				if (!isClosingWindow)
+				{
+					// UIスレッドでコントロール活性制御
+					this.Invoke(new Action(() => this.ControlAllEnabledProperty(false)));
+				}
+			});
 
 			//　キャンセル処理と待機処理両方が完了後にステータスバーのメッセージをクリアするタスクを返却
-			await Task.WhenAll(cancelTask, waitTask).ContinueWith((_) => this.Invoke(new Action(() => this.toolStripStatusLabel.Text = string.Empty)));
+			var task = Task.WhenAll(cancelTask, waitTask);
+			if (!isClosingWindow)
+			{
+				task = task.ContinueWith(_ => this.Invoke(new Action(() => this.toolStripStatusLabel.Text = string.Empty)));
+			}
+			return task.ContinueWith(_ => true);
+
 		}
 		#endregion
 	}

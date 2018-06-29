@@ -12,11 +12,11 @@ namespace WinAppSample_WinForm.Service
 		/// <summary>
 		/// 角度をラジアンに変換する。
 		/// </summary>
-		/// <param name="angle">角度</param>
+		/// <param name="degree">角度</param>
 		/// <returns>ラジアン</returns>
-		public static double AngleToRadian(double angle)
+		public static double DegreeToRadian(double degree)
 		{
-			return angle * (Math.PI / 180);
+			return degree * (Math.PI / 180);
 		}
 		#endregion
 	}
