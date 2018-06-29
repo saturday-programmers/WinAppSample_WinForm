@@ -34,6 +34,8 @@ namespace WinAppSample_WinForm.Business
 			Power,
 			/// <summary>Sin</summary>
 			Sine,
+			/// <summary>Cos</summary>
+			Cosine,
 		}
 		#endregion
 
@@ -105,6 +107,7 @@ namespace WinAppSample_WinForm.Business
 					count = 2;
 					break;
 				case CalculateType.Sine:
+				case CalculateType.Cosine:
 					count = 1;
 					break;
 			}
@@ -134,6 +137,9 @@ namespace WinAppSample_WinForm.Business
 					break;
 				case CalculateType.Sine:
 					ret = new SineCalculator<float>(values[0]);
+					break;
+				case CalculateType.Cosine:
+					ret = new CosineCalculator<float>(values[0]);
 					break;
 			}
 

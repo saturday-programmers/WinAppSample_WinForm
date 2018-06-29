@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\BizMain.cs" />
+    <Compile Include="Service\CosineCalculator.cs" />
     <Compile Include="Service\SubtractionCalculator.cs" />
     <Compile Include="Service\MultiplicationCalculator.cs" />
     <Compile Include="Service\MathUtil.cs" />

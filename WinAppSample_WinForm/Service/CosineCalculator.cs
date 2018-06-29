@@ -5,10 +5,10 @@ using WinAppSample_WinForm.Service;
 namespace WinAppSample_WinForm.Services
 {
 	/// <summary>
-	/// Sin関数の計算を行うクラス
+	/// Cos関数の計算を行うクラス
 	/// </summary>
 	/// <typeparam name="T">角度の型</typeparam>
-	public class SineCalculator<T> : ICalculator<T> where T : struct
+	public class CosineCalculator<T> : ICalculator<T> where T : struct
 	{
 		#region private fields
 		private T degree;
@@ -19,7 +19,7 @@ namespace WinAppSample_WinForm.Services
 		/// コンストラクタ
 		/// </summary>
 		/// <param name="degree">角度</param>
-		public SineCalculator(T degree)
+		public CosineCalculator(T degree)
 		{
 			this.degree = degree;
 		}
@@ -46,7 +46,7 @@ namespace WinAppSample_WinForm.Services
 			switch (this.degree)
 			{
 				case float floatDegree:
-					return (T)(object)Convert.ToSingle(Math.Sin(MathUtil.AngleToRadian(floatDegree)));
+					return (T)(object)Convert.ToSingle(Math.Cos(MathUtil.AngleToRadian(floatDegree)));
 				default:
 					throw new NotImplementedException();
 			}

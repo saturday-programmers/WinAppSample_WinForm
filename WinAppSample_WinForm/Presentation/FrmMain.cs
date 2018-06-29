@@ -23,6 +23,7 @@ namespace WinAppSample_WinForm.Presentation
 		private const string DivisionSign = "÷";
 		private const string PowerSign = "^";
 		private const string SineSign = "sin";
+		private const string CosineSign = "cos";
 		private const int ValueTxtMaxLength = 7;
 
 		private const string NotNumericErrorMessage = "数値を入力して下さい";
@@ -53,7 +54,8 @@ namespace WinAppSample_WinForm.Presentation
 		public enum OtherCalcPattern
 		{
 			Power,
-			Sine
+			Sine,
+			Cosine
 		}
 		#endregion
 
@@ -215,6 +217,10 @@ namespace WinAppSample_WinForm.Presentation
 					this.lblCalcSign1.Text = SineSign + "(";
 					this.lblCalcSign2.Text = "°)";
 					break;
+				case OtherCalcPattern.Cosine:
+					this.lblCalcSign1.Text = CosineSign + "(";
+					this.lblCalcSign2.Text = "°)";
+					break;
 			}
 		}
 
@@ -233,6 +239,7 @@ namespace WinAppSample_WinForm.Presentation
 					ret = 2;
 					break;
 				case OtherCalcPattern.Sine:
+				case OtherCalcPattern.Cosine:
 					ret = 1;
 					break;
 			}
@@ -310,6 +317,9 @@ namespace WinAppSample_WinForm.Presentation
 						break;
 					case OtherCalcPattern.Sine:
 						calcType = CalculateType.Sine;
+						break;
+					case OtherCalcPattern.Cosine:
+						calcType = CalculateType.Cosine;
 						break;
 				}
 			}

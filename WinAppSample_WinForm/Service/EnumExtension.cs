@@ -21,6 +21,8 @@ namespace WinAppSample_WinForm.Service
 					return "べき乗";
 				case OtherCalcPattern.Sine:
 					return "sin";
+				case OtherCalcPattern.Cosine:
+					return "cos";
 				default:
 					return string.Empty;
 			}
