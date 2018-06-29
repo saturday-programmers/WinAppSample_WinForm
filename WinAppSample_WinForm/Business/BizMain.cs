@@ -120,6 +120,9 @@ namespace WinAppSample_WinForm.Business
 				case CalculateType.Addition:
 					ret = new AdditionCalculator<float>(values[0], values[1]);
 					break;
+				case CalculateType.Subtraction:
+					ret = new SubtractionCalculator<float>(values[0], values[1]);
+					break;
 				case CalculateType.Multiplication:
 					ret = new MultiplicationCalculator<float>(values[0], values[1]);
 					break;
