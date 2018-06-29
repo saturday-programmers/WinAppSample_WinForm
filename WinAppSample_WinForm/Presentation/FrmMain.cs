@@ -289,6 +289,14 @@ namespace WinAppSample_WinForm.Presentation
 			{
 				calcType = CalculateType.Addition;
 			}
+			else if(this.rbtnSubtraction.Checked)
+			{
+				calcType = CalculateType.Subtraction;
+			}
+			else if(this.rbtnMultiplication.Checked)
+			{
+				calcType = CalculateType.Multiplication;
+			}
 			else if(this.rbtnDivision.Checked)
 			{
 				calcType = CalculateType.Division;

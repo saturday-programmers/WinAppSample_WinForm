@@ -32,7 +32,7 @@ namespace WinAppSample_WinForm.Business
 			Division,
 			/// <summary>べき乗</summary>
 			Power,
-			/// <summary>Sine</summary>
+			/// <summary>Sin</summary>
 			Sine,
 		}
 		#endregion
@@ -49,6 +49,7 @@ namespace WinAppSample_WinForm.Business
 		/// <param name="calculateType">計算種別</param>
 		/// <param name="values">計算対象の値</param>
 		/// <returns>計算結果</returns>
+		/// <exception cref="ApplicationException">業務エラー発生時に例外を発生させる。</exception>
 		public Task<float> CalculateAsync(CalculateType calculateType, params float[] values)
 		{
 			if (!this.HasCorrectParameterCount(calculateType, values))
@@ -56,27 +57,20 @@ namespace WinAppSample_WinForm.Business
 				throw new ArgumentException("引数の数が正しくありません。");
 			}
 
-			ICalculator<float> calculator = null;
-			switch (calculateType)
+			//　計算処理を行うインスタンス生成
+			var calculator = this.CreateCalculator(calculateType, values);
+			if (calculator == null)
 			{
-				case CalculateType.Addition:
-					calculator = new AdditionCalculator<float>(values[0], values[1]);
-					break;
-				case CalculateType.Division:
-					calculator = new DivisionCalculator<float>(values[0], values[1]);
-					break;
-				case CalculateType.Power:
-					calculator = new PowerCalculator<float>(values[0], values[1]);
-					break;
-				case CalculateType.Sine:
-					calculator = new SineCalculator<float>(values[0]);
-					break;
+				throw new NotImplementedException(calculateType.ToString() + "の処理は実装されていません。");
 			}
 
 			string errorMessage;
 			if (calculator.Validate(out errorMessage))
 			{
+				// 処理キャンセル時に必要なオブジェクトを保持しておく
 				this.tokenSource = new CancellationTokenSource();
+				// 非同期で計算処理実行
+				// 既定ではオーバーフロー時に例外は発生しないので(unchecked)考慮しない
 				this.calcultionTask = Task.Run(() => calculator.Calculate(), this.tokenSource.Token);
 			}
 			else
@@ -104,6 +98,8 @@ namespace WinAppSample_WinForm.Business
 			switch (calculateType)
 			{
 				case CalculateType.Addition:
+				case CalculateType.Subtraction:
+				case CalculateType.Multiplication:
 				case CalculateType.Division:
 				case CalculateType.Power:
 					count = 2;
@@ -114,6 +110,31 @@ namespace WinAppSample_WinForm.Business
 			}
 
 			return (values.Length == count);
+		}
+
+		private ICalculator<float> CreateCalculator(CalculateType calculateType, params float[] values)
+		{
+			ICalculator<float> ret = null;
+			switch (calculateType)
+			{
+				case CalculateType.Addition:
+					ret = new AdditionCalculator<float>(values[0], values[1]);
+					break;
+				case CalculateType.Multiplication:
+					ret = new MultiplicationCalculator<float>(values[0], values[1]);
+					break;
+				case CalculateType.Division:
+					ret = new DivisionCalculator<float>(values[0], values[1]);
+					break;
+				case CalculateType.Power:
+					ret = new PowerCalculator<float>(values[0], values[1]);
+					break;
+				case CalculateType.Sine:
+					ret = new SineCalculator<float>(values[0]);
+					break;
+			}
+
+			return ret;
 		}
 		#endregion
 	}
