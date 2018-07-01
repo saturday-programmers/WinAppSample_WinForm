@@ -76,7 +76,7 @@
     <Compile Include="Presentation\FrmMain.Designer.cs">
       <DependentUpon>FrmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Service\EnumExtension.cs" />
+    <Compile Include="Presentation\EnumExtension.cs" />
     <Compile Include="Service\ICalculator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

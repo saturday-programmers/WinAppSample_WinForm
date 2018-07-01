@@ -2,7 +2,7 @@
 using System.Threading;
 
 
-namespace WinAppSample_WinForm.Services
+namespace WinAppSample_WinForm.Service
 {
 	/// <summary>
 	/// べき乗の計算処理を行うクラス

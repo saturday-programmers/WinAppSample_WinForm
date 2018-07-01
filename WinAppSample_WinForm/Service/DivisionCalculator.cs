@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Threading;
 
 
-namespace WinAppSample_WinForm.Services
+namespace WinAppSample_WinForm.Service
 {
 	/// <summary>
 	/// 除算処理を行うクラス

@@ -1,8 +1,9 @@
 ﻿using static WinAppSample_WinForm.Presentation.FrmMain;
 
 
-namespace WinAppSample_WinForm.Service
+namespace WinAppSample_WinForm.Presentation
 {
+
 	/// <summary>
 	/// 列挙型の拡張メソッドを定義するクラス
 	/// </summary>

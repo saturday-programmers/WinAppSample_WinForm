@@ -1,4 +1,4 @@
-﻿namespace WinAppSample_WinForm.Services
+﻿namespace WinAppSample_WinForm.Service
 {
 	/// <summary>
 	/// 計算処理のインターフェース

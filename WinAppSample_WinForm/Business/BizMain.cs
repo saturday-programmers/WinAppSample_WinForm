@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using WinAppSample_WinForm.Services;
+using WinAppSample_WinForm.Service;
 
 
 namespace WinAppSample_WinForm.Business

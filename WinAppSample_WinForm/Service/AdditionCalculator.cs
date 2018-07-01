@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace WinAppSample_WinForm.Services
+namespace WinAppSample_WinForm.Service
 {
 	/// <summary>
 	/// 加算処理を行うクラス

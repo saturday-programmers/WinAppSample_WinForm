@@ -1,8 +1,7 @@
 ﻿using System;
-using WinAppSample_WinForm.Service;
 
 
-namespace WinAppSample_WinForm.Services
+namespace WinAppSample_WinForm.Service
 {
 	/// <summary>
 	/// Sin関数の計算を行うクラス

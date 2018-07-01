@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WinAppSample_WinForm.Business;
-using WinAppSample_WinForm.Service;
 using static WinAppSample_WinForm.Business.BizMain;
 
 
