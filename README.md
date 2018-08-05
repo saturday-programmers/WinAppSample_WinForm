@@ -51,7 +51,7 @@ C#の文法やWindowsFormsの特徴的な記述をできるだけ使うように
     - FrmMain.txtValue_Validating()
 - 静的クラス
     - MathUtil
--　例外
+- 例外
     - FrmMain.btnCalc_Click()
     - BizMain.CalculateAsync()
     - AdditionCalculator<T>.Calculate()
